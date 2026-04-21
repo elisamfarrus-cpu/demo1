@@ -19,6 +19,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rompiendo Barreras | Humor Negro & Accesibilidad</title>
     <link rel="stylesheet" href="styles.css " />
+    <style>
+      :root {
+        --danger: #ff4d4d;
+        --bg: #1a1a1a;
+        --text: #f0f0f0;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: sans-serif;
+        text-align: center;
+      }
+
+      .high-contrast {
+        background: #000;
+        color: #fff;
+      }
+
+      #game-container {
+        position: relative;
+        width: 100%;
+        height: 200px;
+        border-bottom: 4px solid #555;
+        overflow: hidden;
+        background: #222;
+        margin-top: 20px;
+      }
+
+      #player {
+        position: absolute;
+        bottom: 0;
+        left: 50px;
+        font-size: 40px;
+        transition: transform 0.1s;
+      }
+
+      .obstacle {
+        position: absolute;
+        bottom: 0;
+        font-size: 30px;
+      }
+
+      .joke-card {
+        border: 2px solid #444;
+        padding: 20px;
+        margin: 20px;
+        border-radius: 10px;
+      }
+    </style>
   </head>
 
   <body>
@@ -27,13 +77,10 @@
       <p>Humor negro tan oscuro que ni un ciego lo ve venir.</p>
     </header>
 
+
     <div class="controls" role="region" aria-label="Herramientas de accesibilidad">
-      <button onclick="toggleContrast()" aria-label="Cambiar a modo alto contraste">
-        Modo Alto Contraste
-      </button>
-      <button onclick="readContent()" aria-label="Leer contenido en voz alta">
-        Escuchar Chiste
-      </button>
+      <button onclick="toggleContrast()">Modo Alto Contraste</button>
+      <button onclick="readContent()">Escuchar Chiste</button>
     </div>
 
     <main id="content">
@@ -48,22 +95,18 @@
 
       <section>
         <h2>🕹️ Minijuego: El Salto de la Rampa Ilegal</h2>
-        <p>
-          Pulsa <strong>ESPACIO</strong> para saltar las barreras
-          arquitectónicas (escalones de 20cm que el ayuntamiento llama "rampa").
-        </p>
+        <p>Pulsa <strong>ESPACIO</strong> para saltar.</p>
         <div id="game-container" onclick="jump()">
-          <div id="player" aria-label="Jugador en silla de ruedas">♿</div>
+          <div id="player">♿</div>
           <div id="score" style="position: absolute; top: 10px; right: 10px">
             Puntos: 0
           </div>
         </div>
-        <p id="game-msg" style="color: var(--danger); font-weight: bold"></p>
+        <p id="game-msg" style="color: var(--danger); font-weight: bold; height: 20px"></p>
       </section>
     </main>
 
     <script>
-      // Lógica de Accesibilidad
       function toggleContrast() {
         document.body.classList.toggle("high-contrast");
       }
@@ -75,16 +118,16 @@
         window.speechSynthesis.speak(utterance);
       }
 
-      // Lógica del Minijuego (Simple pero conceptual)
       const player = document.getElementById("player");
       const container = document.getElementById("game-container");
       const scoreElement = document.getElementById("score");
       const msgElement = document.getElementById("game-msg");
       let score = 0;
       let isJumping = false;
+      let isDead = false;
 
       function jump() {
-        if (isJumping) return;
+        if (isJumping || isDead) return;
         isJumping = true;
         let position = 0;
         let timer = setInterval(() => {
@@ -105,22 +148,27 @@
       }
 
       function createObstacle() {
+        if (isDead) return;
         const obstacle = document.createElement("div");
         obstacle.classList.add("obstacle");
-        obstacle.innerHTML = "🧱"; // Representa un escalón mal puesto
+        obstacle.innerHTML = "🧱";
         container.appendChild(obstacle);
-
         let obstaclePos = container.offsetWidth;
 
         let timer = setInterval(() => {
+          if (isDead) {
+            clearInterval(timer);
+            if (obstacle.parentNode) container.removeChild(obstacle);
+            return;
+          }
+
           if (obstaclePos < -50) {
             clearInterval(timer);
-            container.removeChild(obstacle);
+            if (obstacle.parentNode) container.removeChild(obstacle);
             score++;
             scoreElement.innerText = `Puntos: ${score}`;
           }
 
-          // Colisión (Humor Negro)
           const playerRect = player.getBoundingClientRect();
           const obsRect = obstacle.getBoundingClientRect();
 
@@ -130,10 +178,22 @@
             playerRect.right > obsRect.left &&
             playerRect.bottom > obsRect.top
           ) {
+            isDead = true;
+            player.innerHTML = "💥";
+            player.style.transform = "scale(2)";
             msgElement.innerText =
-              "¡CRASH! El seguro no cubre negligencia municipal. Reiniciando...";
-            score = 0;
-            scoreElement.innerText = `Puntos: 0`;
+
+              "¡CRASH! El seguro no cubre negligencia municipal.";
+
+            setTimeout(() => {
+              isDead = false;
+              player.innerHTML = "♿";
+              player.style.transform = "scale(1)";
+              player.style.bottom = "0px";
+              score = 0;
+              scoreElement.innerText = `Puntos: 0`;
+              msgElement.innerText = "";
+            }, 1000);
           }
 
 
@@ -141,10 +201,9 @@
           obstacle.style.right = container.offsetWidth - obstaclePos + "px";
         }, 20);
 
-        setTimeout(createObstacle, Math.random() * 3000 + 1000);
+        setTimeout(createObstacle, Math.random() * 2000 + 1500);
       }
 
-      // Iniciar juego y controles de teclado
       document.addEventListener("keydown", (e) => {
         if (e.code === "Space") jump();
       });
