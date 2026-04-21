@@ -1,11 +1,10 @@
 <!doctype html>
 <html lang="es">
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rompiendo Barreras | Humor Negro & Accesibilidad</title>
-  <link rel="stylesheet" href="styles.css " />
+<meta charset="UTF-32" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rompiendo Barreras | Humor Negro & Accesibilidad</title>
+<link rel="stylesheet" href="styles.css " />
 </head>
 
 <body>
@@ -14,128 +13,144 @@
     <p>Humor negro tan oscuro que ni un ciego lo ve venir.</p>
   </header>
 
-  <div class="controls" role="region" aria-label="Herramientas de accesibilidad">
-    <button onclick="toggleContrast()" aria-label="Cambiar a modo alto contraste">
-      Modo Alto Contraste
-    </button>
-    <button onclick="readContent()" aria-label="Leer contenido en voz alta">
-      Escuchar Chiste
-    </button>
-  </div>
 
-  <main id="content">
-    <section class="joke-card">
-      <h2 id="joke-title">Chiste del día: La Inclusión</h2>
-      <p id="joke-text">
-        ¿Por qué los huérfanos no pueden jugar al escondite?<br />
-        Porque nadie los busca. (Tranquilo, si fueras cojo tampoco podrías
-        correr a esconderte).
-      </p>
-    </section>
+  <head>
+    <meta charset="UTF-32" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rompiendo Barreras | Humor Negro & Accesibilidad</title>
+    <link rel="stylesheet" href="styles.css " />
+  </head>
 
-    <section>
-      <h2>🕹️ Minijuego: El Salto de la Rampa Ilegal</h2>
-      <p>
-        Pulsa <strong>ESPACIO</strong> para saltar las barreras
-        arquitectónicas (escalones de 20cm que el ayuntamiento llama "rampa").
-      </p>
-      <div id="game-container" onclick="jump()">
-        <div id="player" aria-label="Jugador en silla de ruedas">♿</div>
-        <div id="score" style="position: absolute; top: 10px; right: 10px">
-          Puntos: 0
+  <body>
+    <header>
+      <h1>♿ Rompiendo Barreras (Literalmente)</h1>
+      <p>Humor negro tan oscuro que ni un ciego lo ve venir.</p>
+    </header>
+
+    <div class="controls" role="region" aria-label="Herramientas de accesibilidad">
+      <button onclick="toggleContrast()" aria-label="Cambiar a modo alto contraste">
+        Modo Alto Contraste
+      </button>
+      <button onclick="readContent()" aria-label="Leer contenido en voz alta">
+        Escuchar Chiste
+      </button>
+    </div>
+
+    <main id="content">
+      <section class="joke-card">
+        <h2 id="joke-title">Chiste del día: La Inclusión</h2>
+        <p id="joke-text">
+          ¿Por qué los huérfanos no pueden jugar al escondite?<br />
+          Porque nadie los busca. (Tranquilo, si fueras cojo tampoco podrías
+          correr a esconderte).
+        </p>
+      </section>
+
+      <section>
+        <h2>🕹️ Minijuego: El Salto de la Rampa Ilegal</h2>
+        <p>
+          Pulsa <strong>ESPACIO</strong> para saltar las barreras
+          arquitectónicas (escalones de 20cm que el ayuntamiento llama "rampa").
+        </p>
+        <div id="game-container" onclick="jump()">
+          <div id="player" aria-label="Jugador en silla de ruedas">♿</div>
+          <div id="score" style="position: absolute; top: 10px; right: 10px">
+            Puntos: 0
+          </div>
         </div>
-      </div>
-      <p id="game-msg" style="color: var(--danger); font-weight: bold"></p>
-    </section>
-  </main>
+        <p id="game-msg" style="color: var(--danger); font-weight: bold"></p>
+      </section>
+    </main>
 
-  <script>
-    // Lógica de Accesibilidad
-    function toggleContrast() {
-      document.body.classList.toggle("high-contrast");
-    }
+    <script>
+      // Lógica de Accesibilidad
+      function toggleContrast() {
+        document.body.classList.toggle("high-contrast");
+      }
 
-    function readContent() {
-      const text = document.getElementById("joke-text").innerText;
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "es-ES";
-      window.speechSynthesis.speak(utterance);
-    }
+      function readContent() {
+        const text = document.getElementById("joke-text").innerText;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "es-ES";
+        window.speechSynthesis.speak(utterance);
+      }
 
-    // Lógica del Minijuego (Simple pero conceptual)
-    const player = document.getElementById("player");
-    const container = document.getElementById("game-container");
-    const scoreElement = document.getElementById("score");
-    const msgElement = document.getElementById("game-msg");
-    let score = 0;
-    let isJumping = false;
+      // Lógica del Minijuego (Simple pero conceptual)
+      const player = document.getElementById("player");
+      const container = document.getElementById("game-container");
+      const scoreElement = document.getElementById("score");
+      const msgElement = document.getElementById("game-msg");
+      let score = 0;
+      let isJumping = false;
 
-    function jump() {
-      if (isJumping) return;
-      isJumping = true;
-      let position = 0;
-      let timer = setInterval(() => {
-        if (position >= 100) {
-          clearInterval(timer);
-          let downTimer = setInterval(() => {
-            if (position <= 0) {
-              clearInterval(downTimer);
-              isJumping = false;
-            }
-            position -= 5;
-            player.style.bottom = position + "px";
-          }, 20);
-        }
-        position += 5;
-        player.style.bottom = position + "px";
-      }, 20);
-    }
+      function jump() {
+        if (isJumping) return;
+        isJumping = true;
+        let position = 0;
+        let timer = setInterval(() => {
+          if (position >= 100) {
+            clearInterval(timer);
+            let downTimer = setInterval(() => {
+              if (position <= 0) {
+                clearInterval(downTimer);
+                isJumping = false;
+              }
+              position -= 5;
+              player.style.bottom = position + "px";
+            }, 20);
+          }
+          position += 5;
+          player.style.bottom = position + "px";
+        }, 20);
+      }
 
-    function createObstacle() {
-      const obstacle = document.createElement("div");
-      obstacle.classList.add("obstacle");
-      obstacle.innerHTML = "🧱"; // Representa un escalón mal puesto
-      container.appendChild(obstacle);
+      function createObstacle() {
+        const obstacle = document.createElement("div");
+        obstacle.classList.add("obstacle");
+        obstacle.innerHTML = "🧱"; // Representa un escalón mal puesto
+        container.appendChild(obstacle);
 
-      let obstaclePos = container.offsetWidth;
+        let obstaclePos = container.offsetWidth;
 
-      let timer = setInterval(() => {
-        if (obstaclePos < -50) {
-          clearInterval(timer);
-          container.removeChild(obstacle);
-          score++;
-          scoreElement.innerText = `Puntos: ${score}`;
-        }
+        let timer = setInterval(() => {
+          if (obstaclePos < -50) {
+            clearInterval(timer);
+            container.removeChild(obstacle);
+            score++;
+            scoreElement.innerText = `Puntos: ${score}`;
+          }
 
-        // Colisión (Humor Negro)
-        const playerRect = player.getBoundingClientRect();
-        const obsRect = obstacle.getBoundingClientRect();
+          // Colisión (Humor Negro)
+          const playerRect = player.getBoundingClientRect();
+          const obsRect = obstacle.getBoundingClientRect();
 
-        if (
-          playerRect.left < obsRect.right &&
-          playerRect.right > obsRect.left &&
-          playerRect.bottom > obsRect.top
-        ) {
-          msgElement.innerText =
-            "¡CRASH! El seguro no cubre negligencia municipal. Reiniciando...";
-          score = 0;
-          scoreElement.innerText = `Puntos: 0`;
-        }
 
-        obstaclePos -= 7;
-        obstacle.style.right = container.offsetWidth - obstaclePos + "px";
-      }, 20);
+          if (
+            playerRect.left < obsRect.right &&
+            playerRect.right > obsRect.left &&
+            playerRect.bottom > obsRect.top
+          ) {
+            msgElement.innerText =
+              "¡CRASH! El seguro no cubre negligencia municipal. Reiniciando...";
+            score = 0;
+            scoreElement.innerText = `Puntos: 0`;
+          }
 
-      setTimeout(createObstacle, Math.random() * 3000 + 1000);
-    }
 
-    // Iniciar juego y controles de teclado
-    document.addEventListener("keydown", (e) => {
-      if (e.code === "Space") jump();
-    });
+          obstaclePos -= 7;
+          obstacle.style.right = container.offsetWidth - obstaclePos + "px";
+        }, 20);
 
-    createObstacle();
-  </script>
-</body>
+        setTimeout(createObstacle, Math.random() * 3000 + 1000);
+      }
+
+      // Iniciar juego y controles de teclado
+      document.addEventListener("keydown", (e) => {
+        if (e.code === "Space") jump();
+      });
+
+      createObstacle();
+    </script>
+  </body>
 
 </html>
